@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,8 +30,7 @@ public class Punishment {
     @NotNull
     private UUID user;
 
-    @DatabaseField(columnName = "punisher", canBeNull = false)
-    @NotNull
+    @DatabaseField(columnName = "punisher")
     private UUID punisher;
 
     @DatabaseField(columnName = "time", canBeNull = false)
@@ -40,13 +40,22 @@ public class Punishment {
     @Nullable
     private Long expires;
 
-    @DatabaseField(columnName = "reason")
-    @Nullable
+    @DatabaseField(columnName = "reason", canBeNull = false)
+    @NotNull
     private String reason;
 
     @DatabaseField(columnName = "type", canBeNull = false)
     @NotNull
+    @Setter(AccessLevel.PRIVATE)
     private PunishmentType punishmentType;
+
+    public Punishment(@NotNull UUID user, UUID punisher, LocalDateTime expires, @NotNull String reason, @NotNull PunishmentType punishmentType) {
+        this.user = user;
+        this.punisher = punisher;
+        setExpires(expires);
+        this.reason = reason;
+        this.punishmentType = punishmentType;
+    }
 
     public LocalDateTime getTime() {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(this.time), ZoneId.systemDefault());

@@ -10,6 +10,7 @@ import com.j256.ormlite.jdbc.db.DatabaseTypeUtils;
 import com.j256.ormlite.logger.LoggerFactory;
 import com.j256.ormlite.logger.NullLogBackend;
 import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,8 @@ public class DatabaseManager {
         );
 
         this.dao = DaoManager.createDao(connectionSource, Punishment.class);
+
+        TableUtils.createTableIfNotExists(connectionSource, Punishment.class);
     }
 
     /**
