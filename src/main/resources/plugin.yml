@@ -1,0 +1,6 @@
+name: IridiumPunishments
+version: ${version}
+description: The next generation Punishments Plugin
+main: com.iridium.iridiumpunishments.IridiumPunishments
+api-version: '1.13'
+author: Peaches_MLG
