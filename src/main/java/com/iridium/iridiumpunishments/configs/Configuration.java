@@ -1,7 +1,25 @@
 package com.iridium.iridiumpunishments.configs;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Configuration {
     public String prefix = "<GRADIENT:647DEE>&lIridiumPunishments</GRADIENT:7F53AC> &8»";
-    public String permBanMessage = "&d&l[!] &dYou have been Permanently Banned from this server!\n\n &dReason > &7%reason%\n&dStaff > &7%banner%";
-    public String tempBanMessage = "&d&l[!] &dYou have been Banned from this server!\n\n&dReason > &7%reason%\n&dStaff > &7%banner%\n\n&7Expires in %days%day(s) %hours%h %minutes%m and %seconds%sec";
+    public String dateTimeFormat = "EEEE, MMMM dd HH:mm:ss";
+    public List<String> permBanMessage = Arrays.asList(
+            "&c&lIridiumPunishments &8» &7Your account has been suspended!",
+            "",
+            "&cReason &8» &7%reason%",
+            "&cBanned By &8» &7%banner%",
+            "&cDate &8» &7%date%"
+    );
+    public List<String> tempBanMessage = Arrays.asList(
+            "&c&lIridiumPunishments &8» &7Your account has been suspended!",
+            "",
+            "&cReason &8» &7%reason%",
+            "&cBanned By &8» &7%banner%",
+            "&cDate &8» &7%date%",
+            "",
+            "&7Expires in %days% days %hours% hours and %minutes% minutes"
+    );
 }
