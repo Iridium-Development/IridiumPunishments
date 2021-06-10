@@ -1,6 +1,7 @@
 package com.iridium.iridiumpunishments.configs;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Configuration {
@@ -20,6 +21,13 @@ public class Configuration {
             "&cBanned By &8» &7%banner%",
             "&cDate &8» &7%date%",
             "",
+            "&7Expires in %days% days %hours% hours and %minutes% minutes"
+    );
+    public List<String> permMuteMessage = Collections.singletonList(
+            "%prefix% &7You have been muted for %reason%!"
+    );
+    public List<String> tempMuteMessage = Arrays.asList(
+            "%prefix% &7You have been muted for %reason%!",
             "&7Expires in %days% days %hours% hours and %minutes% minutes"
     );
 }
