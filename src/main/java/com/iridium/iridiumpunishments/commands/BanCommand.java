@@ -27,11 +27,11 @@ public class BanCommand implements CommandExecutor {
                     String reason = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
                     UUID uuid = sender instanceof Player ? ((Player) sender).getUniqueId() : null;
 
-                    IridiumPunishments.getInstance().getDatabaseManager().savePunishment(new Punishment(player.getUniqueId(), uuid, null, reason, PunishmentType.BAN));
+                    IridiumPunishments.getInstance().getDatabaseManager().savePunishment(new Punishment(player.getUniqueId(), uuid, null, reason.isEmpty() ? "The Ban Hammer Has Spoken!" : reason, PunishmentType.BAN));
 
                     if (player.getPlayer() != null) {
                         player.getPlayer().kickPlayer(StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getMessages().permBanMessage)
-                                .replace("%reason%", reason)
+                                .replace("%reason%", reason.isEmpty() ? "The Ban Hammer Has Spoken!" : reason)
                                 .replace("%banner%", sender.getName())
                                 .replace("%date%", LocalDateTime.now().format(DateTimeFormatter.ofPattern(IridiumPunishments.getInstance().getConfiguration().dateTimeFormat)))
                         ));
