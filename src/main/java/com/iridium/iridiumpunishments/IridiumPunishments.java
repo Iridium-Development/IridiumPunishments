@@ -1,7 +1,11 @@
 package com.iridium.iridiumpunishments;
 
 import com.iridium.iridiumcore.IridiumCore;
+import com.iridium.iridiumpunishments.commands.BanCommand;
+import com.iridium.iridiumpunishments.commands.KickCommand;
+import com.iridium.iridiumpunishments.commands.MuteCommand;
 import com.iridium.iridiumpunishments.configs.Configuration;
+import com.iridium.iridiumpunishments.configs.Messages;
 import com.iridium.iridiumpunishments.configs.SQL;
 import com.iridium.iridiumpunishments.listeners.InventoryClickListener;
 import com.iridium.iridiumpunishments.listeners.PlayerChatListener;
@@ -22,6 +26,7 @@ public class IridiumPunishments extends IridiumCore {
     private PunishmentManager punishmentManager;
 
     private Configuration configuration;
+    private Messages messages;
     private SQL sql;
 
     @Override
@@ -36,6 +41,11 @@ public class IridiumPunishments extends IridiumCore {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+
+        getCommand("kick").setExecutor(new KickCommand());
+        getCommand("ban").setExecutor(new BanCommand());
+        getCommand("mute").setExecutor(new MuteCommand());
+
         super.onEnable();
     }
 
@@ -50,12 +60,14 @@ public class IridiumPunishments extends IridiumCore {
     public void loadConfigs() {
         this.configuration = getPersist().load(Configuration.class);
         this.sql = getPersist().load(SQL.class);
+        this.messages = getPersist().load(Messages.class);
     }
 
     @Override
     public void saveConfigs() {
         getPersist().save(configuration);
         getPersist().save(sql);
+        getPersist().save(messages);
     }
 
     public static IridiumPunishments getInstance() {

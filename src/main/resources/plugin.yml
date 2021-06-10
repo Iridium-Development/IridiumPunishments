@@ -4,3 +4,14 @@ description: The next generation Punishments Plugin
 main: com.iridium.iridiumpunishments.IridiumPunishments
 api-version: '1.13'
 author: Peaches_MLG
+commands:
+  kick:
+    description: Kicks a player
+  ban:
+    description: Bans a player
+  unban:
+    description: UnBans a player
+  mute:
+    description: Mutes a player
+  unmute:
+    description: UnMutes a player

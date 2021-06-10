@@ -18,7 +18,7 @@ public class PlayerChatListener implements Listener {
             event.setCancelled(true);
             LocalDateTime expires = punishment.getExpires();
             if (expires == null) {
-                event.getPlayer().sendMessage(StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getConfiguration().tempMuteMessage)
+                event.getPlayer().sendMessage(StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getMessages().permMuteMessage)
                         .replace("%prefix%", IridiumPunishments.getInstance().getConfiguration().prefix)
                         .replace("%reason%", punishment.getReason())
                 ));
@@ -32,7 +32,7 @@ public class PlayerChatListener implements Listener {
                 now = now.plusMinutes(minutes);
                 int seconds = (int) (now.until(expires, ChronoUnit.SECONDS));
 
-                event.getPlayer().sendMessage(StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getConfiguration().permMuteMessage)
+                event.getPlayer().sendMessage(StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getMessages().tempMuteMessage)
                         .replace("%prefix%", IridiumPunishments.getInstance().getConfiguration().prefix)
                         .replace("%reason%", punishment.getReason())
                         .replace("%days%", String.valueOf(days))

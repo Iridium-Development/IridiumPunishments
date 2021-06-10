@@ -20,7 +20,7 @@ public class PlayerLoginListener implements Listener {
             LocalDateTime expires = punishment.getExpires();
             String banner = punishment.getPunisher() != null ? Bukkit.getOfflinePlayer(punishment.getPunisher()).getName() : null;
             if (expires == null) {
-                event.disallow(PlayerLoginEvent.Result.KICK_BANNED, StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getConfiguration().permBanMessage)
+                event.disallow(PlayerLoginEvent.Result.KICK_BANNED, StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getMessages().permBanMessage)
                         .replace("%reason%", punishment.getReason())
                         .replace("%date%", punishment.getTime().format(DateTimeFormatter.ofPattern(IridiumPunishments.getInstance().getConfiguration().dateTimeFormat)))
                         .replace("%banner%", banner == null ? "Console" : banner)
@@ -35,7 +35,7 @@ public class PlayerLoginListener implements Listener {
                 now = now.plusMinutes(minutes);
                 int seconds = (int) (now.until(expires, ChronoUnit.SECONDS));
 
-                event.disallow(PlayerLoginEvent.Result.KICK_BANNED, StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getConfiguration().tempBanMessage)
+                event.disallow(PlayerLoginEvent.Result.KICK_BANNED, StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getMessages().tempBanMessage)
                         .replace("%reason%", punishment.getReason())
                         .replace("%days%", String.valueOf(days))
                         .replace("%hours%", String.valueOf(hours))
