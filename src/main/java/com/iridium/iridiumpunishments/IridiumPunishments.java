@@ -4,6 +4,7 @@ import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumpunishments.commands.BanCommand;
 import com.iridium.iridiumpunishments.commands.KickCommand;
 import com.iridium.iridiumpunishments.commands.MuteCommand;
+import com.iridium.iridiumpunishments.commands.UnBanCommand;
 import com.iridium.iridiumpunishments.configs.Configuration;
 import com.iridium.iridiumpunishments.configs.Messages;
 import com.iridium.iridiumpunishments.configs.SQL;
@@ -44,6 +45,7 @@ public class IridiumPunishments extends IridiumCore {
 
         getCommand("kick").setExecutor(new KickCommand());
         getCommand("ban").setExecutor(new BanCommand());
+        getCommand("unban").setExecutor(new UnBanCommand());
         getCommand("mute").setExecutor(new MuteCommand());
 
         super.onEnable();

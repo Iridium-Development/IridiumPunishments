@@ -3,6 +3,7 @@ package com.iridium.iridiumpunishments.managers;
 import com.iridium.iridiumpunishments.IridiumPunishments;
 import com.iridium.iridiumpunishments.configs.SQL;
 import com.iridium.iridiumpunishments.database.Punishment;
+import com.iridium.iridiumpunishments.database.RevokedPunishment;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -17,13 +18,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class DatabaseManager {
 
-    private Dao<Punishment, Integer> dao;
+    private Dao<Punishment, Integer> punishmentsDao;
+    private Dao<RevokedPunishment, Integer> revokedPunishmentsDao;
 
     @Getter(AccessLevel.NONE)
     private ConnectionSource connectionSource;
@@ -41,9 +42,11 @@ public class DatabaseManager {
                 DatabaseTypeUtils.createDatabaseType(databaseURL)
         );
 
-        this.dao = DaoManager.createDao(connectionSource, Punishment.class);
+        this.punishmentsDao = DaoManager.createDao(connectionSource, Punishment.class);
+        this.revokedPunishmentsDao = DaoManager.createDao(connectionSource, RevokedPunishment.class);
 
         TableUtils.createTableIfNotExists(connectionSource, Punishment.class);
+        TableUtils.createTableIfNotExists(connectionSource, RevokedPunishment.class);
     }
 
     /**
@@ -77,14 +80,14 @@ public class DatabaseManager {
     public CompletableFuture<List<Punishment>> getPunishmentsByUser(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                return dao.queryBuilder().where().eq("punisher", uuid).query();
+                return punishmentsDao.queryBuilder().where().eq("punisher", uuid).query();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-            return null;
+            return new ArrayList<Punishment>();
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
-            return null;
+            return Collections.emptyList();
         });
     }
 
@@ -97,14 +100,14 @@ public class DatabaseManager {
     public CompletableFuture<List<Punishment>> getPunishmentsFromUser(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                return dao.queryBuilder().where().eq("user", uuid).query();
+                return punishmentsDao.queryBuilder().where().eq("user", uuid).query();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-            return null;
+            return new ArrayList<Punishment>();
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
-            return null;
+            return Collections.emptyList();
         });
     }
 
@@ -117,13 +120,52 @@ public class DatabaseManager {
     public CompletableFuture<Void> savePunishment(Punishment punishment) {
         return CompletableFuture.runAsync(() -> {
             try {
-                dao.createOrUpdate(punishment);
+                punishmentsDao.createOrUpdate(punishment);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
             return null;
+        });
+    }
+
+    /**
+     * Saves a revokedPunishment to the database
+     *
+     * @param revokedPunishment The revokedPunishment we are saving
+     * @return A completable future for when the revokedPunishment is saved
+     */
+    public CompletableFuture<Void> saveRevokedPunishment(RevokedPunishment revokedPunishment) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                revokedPunishmentsDao.createOrUpdate(revokedPunishment);
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }).exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return null;
+        });
+    }
+
+    /**
+     * Gets the RevokedPunishment related to a punishment if present
+     *
+     * @param punishment The punishment
+     * @return an Optional of the Revoked Punishment
+     */
+    public CompletableFuture<Optional<RevokedPunishment>> getRevokedPunishment(Punishment punishment) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return Optional.ofNullable(revokedPunishmentsDao.queryBuilder().where().eq("punishment_id", punishment).queryForFirst());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return Optional.<RevokedPunishment>empty();
+        }).exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return Optional.empty();
         });
     }
 
@@ -136,7 +178,7 @@ public class DatabaseManager {
     public CompletableFuture<Void> deletePunishment(Punishment punishment) {
         return CompletableFuture.runAsync(() -> {
             try {
-                dao.delete(punishment);
+                punishmentsDao.delete(punishment);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }

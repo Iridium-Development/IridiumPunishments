@@ -53,6 +53,7 @@ public class Punishment {
         this.user = user;
         this.punisher = punisher;
         setExpires(expires);
+        setTime(LocalDateTime.now());
         this.reason = reason;
         this.punishmentType = punishmentType;
     }
