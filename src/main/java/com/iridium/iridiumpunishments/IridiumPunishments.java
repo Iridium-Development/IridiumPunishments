@@ -4,8 +4,10 @@ import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumpunishments.configs.Configuration;
 import com.iridium.iridiumpunishments.configs.SQL;
 import com.iridium.iridiumpunishments.listeners.InventoryClickListener;
+import com.iridium.iridiumpunishments.listeners.PlayerChatListener;
 import com.iridium.iridiumpunishments.listeners.PlayerLoginListener;
 import com.iridium.iridiumpunishments.managers.DatabaseManager;
+import com.iridium.iridiumpunishments.managers.PunishmentManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 
@@ -17,6 +19,7 @@ public class IridiumPunishments extends IridiumCore {
     private static IridiumPunishments instance;
 
     private DatabaseManager databaseManager;
+    private PunishmentManager punishmentManager;
 
     private Configuration configuration;
     private SQL sql;
@@ -25,6 +28,7 @@ public class IridiumPunishments extends IridiumCore {
     public void onEnable() {
         instance = this;
         this.databaseManager = new DatabaseManager();
+        this.punishmentManager = new PunishmentManager();
         try {
             databaseManager.init(this);
         } catch (SQLException throwables) {
@@ -39,6 +43,7 @@ public class IridiumPunishments extends IridiumCore {
     public void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerLoginListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerChatListener(), this);
     }
 
     @Override

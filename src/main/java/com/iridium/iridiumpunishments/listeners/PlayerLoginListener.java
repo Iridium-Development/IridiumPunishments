@@ -16,7 +16,7 @@ public class PlayerLoginListener implements Listener {
 
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
-        IridiumPunishments.getInstance().getDatabaseManager().getPunishmentsFromUser(event.getPlayer().getUniqueId()).join().stream().filter(punishment -> punishment.getPunishmentType() == PunishmentType.BAN && (punishment.getExpires() == null || punishment.getExpires().isAfter(LocalDateTime.now()))).findFirst().ifPresent(punishment -> {
+        IridiumPunishments.getInstance().getPunishmentManager().getActivePunishment(event.getPlayer().getUniqueId(), PunishmentType.BAN).ifPresent(punishment -> {
             LocalDateTime expires = punishment.getExpires();
             String banner = punishment.getPunisher() != null ? Bukkit.getOfflinePlayer(punishment.getPunisher()).getName() : null;
             if (expires == null) {
