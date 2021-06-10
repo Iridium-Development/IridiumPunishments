@@ -5,6 +5,7 @@ import com.iridium.iridiumpunishments.IridiumPunishments;
 import com.iridium.iridiumpunishments.PunishmentType;
 import com.iridium.iridiumpunishments.database.Punishment;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,18 +22,20 @@ public class BanCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender.hasPermission("iridiumpunishments.ban")) {
             if (args.length >= 1) {
-                Player player = Bukkit.getPlayer(args[0]);
-                if (player != null) {
+                OfflinePlayer player = Bukkit.getOfflinePlayer(args[0]);
+                if (player.hasPlayedBefore()) {
                     String reason = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
                     UUID uuid = sender instanceof Player ? ((Player) sender).getUniqueId() : null;
 
                     IridiumPunishments.getInstance().getDatabaseManager().savePunishment(new Punishment(player.getUniqueId(), uuid, null, reason, PunishmentType.BAN));
 
-                    player.kickPlayer(StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getMessages().permBanMessage)
-                            .replace("%reason%", reason)
-                            .replace("%banner%", sender.getName())
-                            .replace("%date%", LocalDateTime.now().format(DateTimeFormatter.ofPattern(IridiumPunishments.getInstance().getConfiguration().dateTimeFormat)))
-                    ));
+                    if (player.getPlayer() != null) {
+                        player.getPlayer().kickPlayer(StringUtils.color(String.join("\n", IridiumPunishments.getInstance().getMessages().permBanMessage)
+                                .replace("%reason%", reason)
+                                .replace("%banner%", sender.getName())
+                                .replace("%date%", LocalDateTime.now().format(DateTimeFormatter.ofPattern(IridiumPunishments.getInstance().getConfiguration().dateTimeFormat)))
+                        ));
+                    }
                 } else {
                     sender.sendMessage("player null");
                 }
